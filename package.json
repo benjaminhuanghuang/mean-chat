@@ -1,0 +1,24 @@
+{
+  "name": "mean-chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benjaminhuanghuang/mean-chat.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/benjaminhuanghuang/mean-chat/issues"
+  },
+  "homepage": "https://github.com/benjaminhuanghuang/mean-chat#readme",
+  "dependencies": {
+    "mongodb": "^2.2.26",
+    "socket.io": "^1.7.3"
+  }
+}
