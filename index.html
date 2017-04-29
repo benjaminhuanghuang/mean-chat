@@ -1,0 +1,104 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mongo Chat</title>
+    <link rel="stylesheet" href="http://bootswatch.com/cerulean/bootstrap.min.css">
+    <style>
+        .messages {
+            height: 400px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-md-6 col-md-offset-3">
+            <h1 class="text-center">
+                MongoChat
+                <button class="btn btn-danger clearBtn">Clear</button>
+            </h1>
+            <div class="status"></div>
+            <div class="chat">
+                <input type="text" class="username form-control" placeholder="What's your name'">
+                <br>
+                <div class="messages well"></div>
+                <textarea class="msg form-control" placeholder="Enter Message..."></textarea>
+            </div>
+        </div>
+    </div>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script>
+        (function () {
+            var element = function (selector) {
+                return docmuent.querySelector(selector);
+            }
+
+            //Get element
+            var status = element('.status');
+            var messages = element('.messages');
+            var textarea = element('.chat textarea');
+            var messages = element('.username');
+            var clearBtn = element('.clearBtn');
+
+            StatusDefault = status.textContent;
+
+            setStatus = function (s) {
+                status.textContent = s;
+                if (s !== StatusDefault) {
+                    var delay = setTimeout(function () {
+                        setStatus(StatusDefault);
+                    }, 3000);
+                }
+            }
+
+            var socket = io.connect("http://localhost:3000");
+            if (socket !== undefined) {
+                socket.on('output', function () {
+                    if (data.length) {
+                        for (var x = 0; x < data.length; x++) {
+                            var message = document.createElement('div');
+                            messaage.setAttribute('class', 'chat-message');
+                            message.textContent = data[x].name + ": " + data[x].message;
+                            messages.appendChild(message);
+                            messages.insertBefore(message, messsages.firstChild);
+                        }
+                    }
+                });
+                // Status
+                socket.on('status', function (data) {
+                    setStatus((typeof data === 'object' ? data.message : data));
+                    if (data.clear === true) {
+                        textarea.value = "";
+                    }
+                });
+
+                // Keydown
+                textarea.addEventListener('keydown', function(event){
+                    var self = this;
+                    name = username.value;
+                    if(event.which ==13 && envet.shiftkey == false){
+                        socket.emit('input', {
+                            name: name,
+                            message :message
+                        })
+                    }
+                });
+
+                // Clear
+                clearBtn.addEventListener('click', function(event){
+                    socket.emit('clear');
+                });
+
+                // Clear message
+                socket.on('cleared', function(){
+                    message.textConent= '';
+                });
+            }
+        })();
+    </script>
+</body>
+
+</html>
